@@ -10,7 +10,7 @@ library(DT)
 library(PoissonSeq)
 library(ggplot2)
 
-setwd("C:/Users/nputn/Google Drive/Projects/UGARelatedResearch/TCellsProject/")
+setwd("C:/Users/nputn/Google Drive/Projects/UGARelatedResearch/TCellsProject/") #changes to working directory
 
 getTCGABarcodes <- function(cancerNamesVector){
   
@@ -53,7 +53,7 @@ CDCdataExtract <- function(barcodeDF, Ids, ensemblIds){ #A vector of strings cor
   barcodes <- barcodeDF[,1] 
   
   
-  if (!file.exists("allGeneMatrix.csv")){
+  if (!file.exists("allGeneMatrix.csv")){ #assumes file is in working directory, this is so you don't have to redownload/process the data every time
     queryDown <- GDCquery(project = Ids, 
                           data.category = "Transcriptome Profiling",
                           data.type = "Gene Expression Quantification",
@@ -67,7 +67,7 @@ CDCdataExtract <- function(barcodeDF, Ids, ensemblIds){ #A vector of strings cor
     allGeneMatrix <- TCGAanalyze_Preprocessing(object = preData, #After this, the data is a big matrix with samples as columns and genes as rows, yay!
                                                datatype = "HTSeq - Counts")
     
-    write.csv(allGeneMatrix, row.names = TRUE, file = "allGeneMatrix.csv")
+    write.csv(allGeneMatrix, row.names = TRUE, file = "allGeneMatrix.csv") #write to working directory
   }
   
   else{
