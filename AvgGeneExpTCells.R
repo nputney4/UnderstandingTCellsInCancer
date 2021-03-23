@@ -11,7 +11,7 @@ library(ggplot2)
 library(EnsDb.Hsapiens.v79)
 
 
-setwd("C:/Users/nputn/Google Drive/Projects/UGARelatedResearch/TCellsProject/")
+setwd("C:/Users/nputn/Google Drive/Projects/UGARelatedResearch/TCellsProject/") #set working directory
 
 #R version 4.0.3
 
@@ -75,11 +75,11 @@ CDCdataExtract <- function(barcodeDF, Ids, ensemblIds){ #A vector of strings cor
     
     preData <- GDCprepare(query = queryDown, directory = "GDCdata")#Reads downloaded data into an R object 
     
-    if (!file.exists("allGeneMatrix")){
+    if (!file.exists("allGeneMatrix")){ #assumes the file is in current working directory, this is so you dont have to redownload/process the data each time
       allGeneMatrix <- TCGAanalyze_Preprocessing(object = preData, #After this, the data is a big matrix with samples as columns and genes as rows, yay!
                               datatype = "HTSeq - Counts")
     
-      write.csv(allGeneMatrix, row.names = TRUE, file = "allGeneMatrix.csv")
+      write.csv(allGeneMatrix, row.names = TRUE, file = "allGeneMatrix.csv") #writes file into working directory 
     }
     
     else{
@@ -156,7 +156,7 @@ avgByTissue <- function(Ids, allGenes, STNPT){
   avgDF <- data.frame(Location = character(0), Status = character(0),
                       Gene = character(0), Expression = character(0))
   
-  #as.data.frame(matrix(NA, nrow = 2*length(Ids)*length(ensemblIds), ncol = 4))
+  #as.data.frame(matrix(NA, nrow = 2*length(Ids)*length(ensemblIds), ncol = 4)) - IGNORE
   
   for (i in Ids){
     for (j in allGenes){
@@ -430,35 +430,6 @@ main <- function(){
 }
 
 
-
-
-
-
-
-
-
-
-
-
-ensemblIds <- c("ENSG00000010610", "ENSG00000153563" ) #CD4, CD8
-  
-
-
-
-geneCellDF <- data.frame(Gene = character(0), MarkerOf = character(0))
-i = 1
-
-for (geneName in allGenes){
-  for (cell in geneNameToCell(geneName) %>% unlist){
-    geneVec <- c(geneName, cell)
-    geneCellDF[i,] <- geneVec
-    i = i+1
-  }
-}
-
-merge(geneCellDF, avgDF)
-
-
 # this creates a list with each header a gene and gives which cell types
 # it is a marker of
 geneToTypeList <- list()
@@ -477,6 +448,5 @@ for(gene in allGenes){
 
 
 
-#finding which genes is a marker of which cells
-unique(subset(avgDFMarker, Gene == "CD4", select = "MarkerOf") %>% unlist())
+
   
